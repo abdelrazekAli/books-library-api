@@ -192,21 +192,28 @@ exports.updateMe = async (req, res) => {
 };
 
 exports.userAuth = async (req, res) => {
-  let { email, password } = req.body;
+  try {
+    let { email, password } = req.body;
 
-  let validationError = await authValidation(req.body);
-  if (validationError) {
-    return res.status(400).send(validationError.details[0].message);
+    let validationError = await authValidation(req.body);
+    if (validationError) {
+      return res.status(400).send(validationError.details[0].message);
+    }
+
+    let user = await getUserByEmail(email);
+    if (!user) return res.status(400).send(`Invalid email or password`);
+
+    let passwordCheck = await bcrypt.compare(password, user.password);
+    if (!passwordCheck)
+      return res.status(400).send(`Invalid email or password`);
+
+    let jwtPayload = { userId: user.user_id, isAdmin: user.is_admin };
+    let token = generateToken(jwtPayload);
+
+    return res.status(200).send(token);
+  } catch (err) {
+    util.sendMail(err);
+    logger.error(`From user.controller on userAuth : ${err}`);
+    return res.status(500).send({ error: "Faild to update your details" });
   }
-
-  let user = await getUserByEmail(email);
-  if (!user) return res.status(400).send(`Invalid email or password`);
-
-  let passwordCheck = await bcrypt.compare(password, user.password);
-  if (!passwordCheck) return res.status(400).send(`Invalid email or password`);
-
-  let jwtPayload = { userId: user.user_id, isAdmin: user.is_admin };
-  let token = generateToken(jwtPayload);
-
-  return res.status(200).send(token);
 };
