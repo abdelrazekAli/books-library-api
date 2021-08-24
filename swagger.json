@@ -1,11 +1,16 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample books store management api",
+        "description": "Books store management api",
         "version": "1.0.0",
         "title": "Book store Api",
         "contact": {
+            "name": ": dev.abdelrazek@gmail.com",
             "email": "dev.abdelrazek@gmail.com"
+        },
+        "license": {
+            "name": "Github repository",
+            "url": "https://github.com/abdelrazekAli/books-store-api"
         }
     },
     "host": "localhost:3000",
