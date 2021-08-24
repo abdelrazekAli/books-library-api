@@ -15,6 +15,7 @@ app.use(cors());
 
 // if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 app.set("trust proxy", 1);
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -24,7 +25,7 @@ app.use(limiter);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(helmet());
+app.use(helmet()); //To secure Express app by setting various HTTP headers
 
 app.use("/uploads", express.static("uploads"));
 app.use(

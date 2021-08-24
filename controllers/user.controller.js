@@ -107,7 +107,7 @@ exports.updateUser = async (req, res) => {
         return res
           .status(400)
           .send(
-            "Invalid image format. Only 'jpeg' and 'png' images are allowed and name must be less than 30 characters"
+            "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and its name must be less than 30 characters"
           );
       }
 
@@ -164,7 +164,7 @@ exports.updateMe = async (req, res) => {
         return res
           .status(400)
           .send(
-            "Invalid image format. Only 'jpeg' and 'png' images are allowed and name must be less than 30 characters"
+            "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and name must be less than 30 characters"
           );
       }
 
@@ -178,6 +178,7 @@ exports.updateMe = async (req, res) => {
 
       userImg = `uploads/user.imgs/${imgName}`;
     }
+
     let values = [username, email, fullName, userImg, age, userId];
 
     let updateUserQuery = queries.queryList.updateUserQuery;

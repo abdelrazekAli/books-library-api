@@ -4,7 +4,7 @@ const logger = require("../config/logger");
 
 exports.checkImgFromat = async (image) => {
   let imgExtension = path.extname(image.name);
-  const allowedExtension = [".png", ".jpg", ".jpeg"];
+  const allowedExtension = [".png", ".jpg", ".JPG", ".jpeg"];
   if (!allowedExtension.includes(imgExtension) || image.name.length > 30)
     return false;
   return true;

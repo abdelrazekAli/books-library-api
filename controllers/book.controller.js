@@ -11,7 +11,6 @@ exports.getBooksList = async (req, res) => {
     return res.status(200).send(JSON.stringify(result.rows));
   } catch (err) {
     logger.error(`From book.controller on getBookDetails : ${err}`);
-
     return res.status(500).send({ error: "Faild to get Books list" });
   }
 };
@@ -84,7 +83,7 @@ exports.insertBook = async (req, res) => {
       return res
         .status(400)
         .send(
-          "Image format must be png or jpg or jpeg and name must be less than 30 characters"
+          "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and its name must be less than 30 characters"
         );
     }
 
@@ -154,31 +153,30 @@ exports.updateBook = async (req, res) => {
       return res.status(404).send({ error: "Store code not found" });
     }
 
+    let bookImg = result1.rows[0].book_img;
+
     //check if image file exist
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send("Book image is required");
+    if (req.files) {
+      //check image extension and name length
+      let image = req.files.bookImg;
+      let checkImgFromat = await imgUpload.checkImgFromat(image);
+      if (!checkImgFromat) {
+        return res
+          .status(400)
+          .send(
+            "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and its name must be less than 30 characters"
+          );
+      }
+
+      //upload img
+      let imgName = await imgUpload.uploadBookImg(image);
+      if (!imgName) return res.status(500).send("Faild to upload image");
+
+      imgUpload.removeOldImg(bookImg); //remove Old image
+
+      bookImg = `uploads/book.imgs/${imgName}`;
     }
 
-    //check image extension and name length
-    let image = req.files.bookImg;
-    let checkImgFromat = await imgUpload.checkImgFromat(image);
-    if (!checkImgFromat) {
-      return res
-        .status(400)
-        .send(
-          "Image format must be png or jpg or jpeg and name must be less than 30 characters"
-        );
-    }
-
-    //upload img
-    let imgName = await imgUpload.uploadBookImg(image);
-    if (!imgName) return res.status(500).send("Faild to upload image");
-
-    //remove Old image
-    let oldImg = result1.rows[0].book_img;
-    imgUpload.removeOldImg(oldImg);
-
-    let bookImg = `uploads/book.imgs/${imgName}`;
     let values = [
       bookTitle,
       bookDescription,

@@ -1,5 +1,4 @@
 const winston = require("winston");
-const dotenv = require("dotenv").config();
 
 const timezoned = () => {
   return new Date().toLocaleString();
@@ -8,7 +7,7 @@ const timezoned = () => {
 const logger = winston.createLogger({
   transports: [
     //
-    // - Write all logs with level `error` and below to `error.log`
+    // - Write all logs with level `error` and below it to `error.log`
     //
     new winston.transports.File({
       level: "error",
@@ -21,6 +20,7 @@ const logger = winston.createLogger({
     }),
   ],
 });
+
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
@@ -28,4 +28,5 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
+
 module.exports = logger;

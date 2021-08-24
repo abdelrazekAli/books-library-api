@@ -266,6 +266,9 @@
                     "400": {
                         "description": "Invalid Data supplied"
                     },
+                    "413": {
+                        "description": "Image must be less than 5MB"
+                    },
                     "500": {
                         "description": "Faild to update user"
                     }
@@ -328,6 +331,9 @@
                     },
                     "400": {
                         "description": "Invalid Data supplied"
+                    },
+                    "413": {
+                        "description": "Image must be less than 5MB"
                     },
                     "500": {
                         "description": "Faild to update user"
@@ -547,6 +553,9 @@
                     "404": {
                         "description": "Store code not found"
                     },
+                    "413": {
+                        "description": "Image must be less than 5MB"
+                    },
                     "500": {
                         "description": "Faild to insert new book"
                     }
@@ -643,7 +652,6 @@
                         "in": "formData",
                         "name": "bookImg",
                         "description": "Book image",
-                        "required": true,
                         "type": "file"
                     }
                 ],
@@ -877,7 +885,15 @@
                         "description": "Store object that needs to be added to the system",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Store"
+                            "type": "object",
+                            "properties": {
+                                "storeName": {
+                                    "type": "string"
+                                },
+                                "storeAddress": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
@@ -916,7 +932,21 @@
                         "required": "true",
                         "description": "Store object that needs to be updated",
                         "schema": {
-                            "$ref": "#/definitions/Store"
+                            "type": "object",
+                            "properties": {
+                                "storeId": {
+                                    "type": "integer"
+                                },
+                                "storeName": {
+                                    "type": "string"
+                                },
+                                "storeAddress": {
+                                    "type": "string"
+                                },
+                                "createdBy": {
+                                    "type": "string"
+                                }
+                            }
                         }
                     }
                 ],
@@ -1076,10 +1106,16 @@
                     "type": "string"
                 },
                 "storeCode": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Random generated string of 5 uppercase characters"
                 },
                 "createdBy": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Admin"
+                },
+                "createdOn": {
+                    "type": "string",
+                    "default": "Current date"
                 }
             }
         }

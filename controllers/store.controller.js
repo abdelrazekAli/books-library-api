@@ -18,6 +18,7 @@ exports.getStoresList = async (req, res) => {
 exports.getStoreDetails = async (req, res) => {
   try {
     let storeId = req.params.storeId;
+
     let getStoreDetailsQuery = queries.queryList.getStoreDetailsQuery;
     let result = await dbConnection.dbQuery(getStoreDetailsQuery, [storeId]);
     if (result.rowCount == 0) {
@@ -25,6 +26,7 @@ exports.getStoreDetails = async (req, res) => {
         .status(404)
         .send({ error: `Store with this id: ${storeId} not found` });
     }
+
     return res.status(200).send(JSON.stringify(result.rows));
   } catch (err) {
     logger.error(`From store.controller on getStoredetails : ${err}`);
@@ -36,8 +38,7 @@ exports.insertStore = async (req, res) => {
   try {
     let createdBy = "admin";
     let createdOn = new Date();
-    let storeName = req.body.storeName;
-    let storeAddress = req.body.storeAddress;
+    let { storeName, storeAddress } = req.body;
 
     let validationError = await storeValidation(req.body);
     if (validationError) {
@@ -88,11 +89,13 @@ exports.updateStore = async (req, res) => {
 exports.getStoreBooks = async (req, res) => {
   try {
     let storeId = req.params.storeId;
+
     let checkStoreIdQuery = queries.queryList.checkStoreIdQuery;
     let result1 = await dbConnection.dbQuery(checkStoreIdQuery, [storeId]);
     if (result1.rows[0].count == 0) {
       return res.status(404).send({ error: `Store id: ${storeId} not found` });
     }
+
     let getStoreBooksQuery = queries.queryList.getStoreBooksQuery;
     let result = await dbConnection.dbQuery(getStoreBooksQuery, [storeId]);
     return res.status(200).send(JSON.stringify(result.rows));

@@ -27,6 +27,7 @@ exports.Book = class Book {
     this.createdBy = createdBy;
   }
 };
+
 exports.bookValidation = async (data) => {
   const schema = Joi.object({
     bookId: Joi.number().integer(),
