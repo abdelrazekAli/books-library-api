@@ -1,9 +1,10 @@
 {
   "name": "books-store",
   "version": "1.0.0",
-  "description": "",
+  "description": "books store management system",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Abdelrazek Ali",
@@ -22,5 +23,9 @@
     "randomstring": "^1.2.1",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3"
+  },
+  "engines": {
+    "node": "14.15.4",
+    "npm": "7.20.0"
   }
 }
