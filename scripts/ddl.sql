@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS bms.book
 
 CREATE TABLE IF NOT EXISTS bms.store
 (
-    store_id integer NOT NULL,
+    store_id serial NOT NULL,
     store_name character varying(100) NOT NULL,
     store_code character varying(5) NOT NULL,
     created_on timestamp without time zone NOT NULL,
