@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+
 const db_config = {
   connectionString: process.env.DB_URL,
   // number of milliseconds to wait before timing out when connecting a new client
@@ -8,10 +9,12 @@ const db_config = {
   // maximum number of clients the pool should contain
   max: 20,
 };
+
 let pool = new Pool(db_config);
 pool.on("connect", () => {
   console.log("databases connected");
 });
+
 pool.on("remove", () => {
   console.log("database connection removed");
 });
