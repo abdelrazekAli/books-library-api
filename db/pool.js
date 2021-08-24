@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 
 const db_config = {
-  connectionString: process.env.DB_URL,
+  connectionString: process.env.DATABASE_URL,
   // number of milliseconds to wait before timing out when connecting a new client
   connectionTimeoutMillis: 3000,
   // number of milliseconds a client must sit idle in the pool and not be checked out
