@@ -40,7 +40,13 @@ app.use(
 );
 
 // Router for Api docs
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument, {
+    customCss: ".swagger-ui .topbar { display: none }",
+  })
+);
 
 // Routes Middlewares
 app.use("/api/v1/users", userRouter);
