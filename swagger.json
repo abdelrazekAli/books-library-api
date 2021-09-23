@@ -1,9 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Books store management api",
+        "description": "Books library management api",
         "version": "1.0.0",
-        "title": "Books store Api",
+        "title": "Books library Api",
         "contact": {
             "name": ": dev.abdelrazek@gmail.com",
             "email": "dev.abdelrazek@gmail.com"
