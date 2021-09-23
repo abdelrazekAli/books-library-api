@@ -2,11 +2,11 @@ const { Pool } = require("pg");
 
 const db_config = {
   connectionString: process.env.DATABASE_URL,
- 
+
   ssl: {
     rejectUnauthorized: false,
   },
-  
+
   // number of milliseconds to wait before timing out when connecting a new client
   connectionTimeoutMillis: 3000,
   // number of milliseconds a client must sit idle in the pool and not be checked out
@@ -23,4 +23,5 @@ pool.on("connect", () => {
 pool.on("remove", () => {
   console.log("database connection removed");
 });
+
 module.exports = pool;

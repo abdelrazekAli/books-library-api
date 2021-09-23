@@ -1,14 +1,13 @@
 const winston = require("winston");
 
+// Set date to local
 const timezoned = () => {
   return new Date().toLocaleString();
 };
 
 const logger = winston.createLogger({
   transports: [
-    //
-    // - Write all logs with level `error` and below it to `error.log`
-    //
+    // Write all logs with level `error` and below it to `errors.log`
     new winston.transports.File({
       level: "error",
       filename: "errors.log",

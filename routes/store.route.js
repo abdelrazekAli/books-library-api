@@ -1,17 +1,23 @@
 const router = require("express").Router();
-const storeController = require("../controllers/store.controller");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
-router.get("/stores", auth, storeController.getStoresList);
-router.get("/stores/details/:storeId", auth, storeController.getStoreDetails);
-router.get("/stores/books/:storeId", auth, storeController.getStoreBooks);
-router.post("/stores/save", [auth, admin], storeController.insertStore);
-router.put("/stores/update", [auth, admin], storeController.updateStore);
-router.delete(
-  "/stores/delete/id/:storeId",
-  [auth, admin],
-  storeController.deleteStore
-);
+// Import store controllers
+const {
+  getStoresList,
+  getStoreDetails,
+  getStoreBooks,
+  insertStore,
+  updateStore,
+  deleteStore,
+} = require("../controllers/store.controller");
+
+// Book routers
+router.get("/", auth, getStoresList);
+router.get("/id/:storeId", auth, getStoreDetails);
+router.get("/books/:storeId", auth, getStoreBooks);
+router.post("/", [auth, admin], insertStore);
+router.put("/", [auth, admin], updateStore);
+router.delete("/:storeId", [auth, admin], deleteStore);
 
 module.exports = router;

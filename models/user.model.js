@@ -1,6 +1,6 @@
-const queries = require("../db/queries");
-const dbConnection = require("../db/connection");
 const Joi = require("joi");
+const queries = require("../db/queries").queryList;
+const { dbQuery } = require("../db/connection");
 
 exports.User = class User {
   constructor(
@@ -24,6 +24,7 @@ exports.User = class User {
   }
 };
 
+// User register validation
 exports.userValidation = async (data) => {
   const schema = Joi.object({
     userId: Joi.number().integer(),
@@ -37,6 +38,7 @@ exports.userValidation = async (data) => {
   return schema.validate(data).error;
 };
 
+// User login validation
 exports.authValidation = async (data) => {
   const schema = Joi.object({
     email: Joi.string().min(2).max(50).email().lowercase().required(),
@@ -45,28 +47,32 @@ exports.authValidation = async (data) => {
   return schema.validate(data).error;
 };
 
+// Check username
 exports.checkUsername = async (username) => {
-  let checkUsernameQuery = queries.queryList.checkUsernameQuery;
-  let result = await dbConnection.dbQuery(checkUsernameQuery, [username]);
+  let { checkUsernameQuery } = queries;
+  let result = await dbQuery(checkUsernameQuery, [username]);
   if (result.rows[0].count == 0) return false;
   return true;
 };
 
+// Check email
 exports.checkEmail = async (email) => {
-  let checkEmailQuery = queries.queryList.checkEmailQuery;
-  let result = await dbConnection.dbQuery(checkEmailQuery, [email]);
+  let { checkEmailQuery } = queries;
+  let result = await dbQuery(checkEmailQuery, [email]);
   if (result.rows[0].count == 0) return false;
   return true;
 };
 
+// Get user by id
 exports.getUserById = async (id) => {
-  let getUserByIdQuery = queries.queryList.getUserByIdQuery;
-  let result = await dbConnection.dbQuery(getUserByIdQuery, [id]);
+  let { getUserByIdQuery } = queries;
+  let result = await dbQuery(getUserByIdQuery, [id]);
   return result.rows[0];
 };
 
+// Get user by email
 exports.getUserByEmail = async (email) => {
-  let getUserByEmailQuery = queries.queryList.getUserByEmailQuery;
-  let result = await dbConnection.dbQuery(getUserByEmailQuery, [email]);
+  let { getUserByEmailQuery } = queries;
+  let result = await dbQuery(getUserByEmailQuery, [email]);
   return result.rows[0];
 };

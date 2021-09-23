@@ -1,6 +1,6 @@
-const queries = require("../db/queries");
-const dbConnection = require("../db/connection");
 const Joi = require("joi");
+const queries = require("../db/queries").queryList;
+const { dbQuery } = require("../db/connection");
 
 exports.Store = class Store {
   constructor(storeId, storeName, storeCode, storeAddress) {
@@ -11,13 +11,7 @@ exports.Store = class Store {
   }
 };
 
-exports.checkId = async (id) => {
-  let checkStoreIdQuery = queries.queryList.checkStoreIdQuery;
-  let result = await dbConnection.dbQuery(checkStoreIdQuery, [id]);
-  if (result.rows[0].count == 0) return false;
-  return true;
-};
-
+// Store validation
 exports.storeValidation = async (data) => {
   const schema = Joi.object({
     storeId: Joi.number().integer(),
@@ -26,4 +20,12 @@ exports.storeValidation = async (data) => {
     createdBy: Joi.string().max(50),
   });
   return schema.validate(data).error;
+};
+
+// Check store id
+exports.checkId = async (id) => {
+  let { checkStoreIdQuery } = queries;
+  let result = await dbQuery(checkStoreIdQuery, [id]);
+  if (result.rows[0].count == 0) return false;
+  return true;
 };

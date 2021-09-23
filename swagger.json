@@ -13,7 +13,7 @@
             "url": "https://github.com/abdelrazekAli/books-store-api"
         }
     },
-    "host": "localhost:3000",
+    "host": "books.abdelrazek.live",
     "basePath": "/api/v1",
     "tags": [
         {
@@ -30,7 +30,7 @@
         }
     ],
     "schemes": [
-        "http"
+        "https"
     ],
     "securityDefinitions": {
         "Bearer": {
@@ -51,8 +51,8 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Return all the users",
-                "description": "Lists all the users from the system",
+                "summary": "Get all users",
+                "description": "Lists all users from the system",
                 "security": [
                     {
                         "Bearer": []
@@ -75,139 +75,7 @@
                         "description": "Faild to get users list"
                     }
                 }
-            }
-        },
-        "/users/me": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Return the auth user",
-                "description": "Return the auth user details",
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/User"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Faild to auth user"
-                    }
-                }
-            }
-        },
-        "/users/save": {
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Add a new user",
-                "description": "Add a new user to the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "user data",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "username": {
-                                    "type": "string"
-                                },
-                                "email": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
-                                },
-                                "fullName": {
-                                    "type": "string"
-                                },
-                                "age": {
-                                    "type": "integer"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "user added successfully and token send to header as x-auth-token"
-                    },
-                    "400": {
-                        "description": "Invalid Data supplied"
-                    },
-                    "500": {
-                        "description": "Faild to insert new user"
-                    }
-                }
-            }
-        },
-        "/users/auth": {
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "User Login",
-                "description": "user login to the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "user data",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "email": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfully login and return token"
-                    },
-                    "400": {
-                        "description": "Invalid Data supplied"
-                    },
-                    "500": {
-                        "description": "Faild to login"
-                    }
-                }
-            }
-        },
-        "/users/update": {
+            },
             "put": {
                 "tags": [
                     "Users"
@@ -280,7 +148,79 @@
                 }
             }
         },
-        "/users/me/update": {
+        "/users/id/{userId}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by Id",
+                "description": "Returns a user details",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id of user to return",
+                        "required": "true",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User ID not found"
+                    },
+                    "500": {
+                        "description": "Faild to get user"
+                    }
+                }
+            }
+        },
+        "/users/me": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get auth user",
+                "description": "Return auth user details",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Faild to get auth user"
+                    }
+                }
+            },
             "put": {
                 "tags": [
                     "Users"
@@ -346,13 +286,112 @@
                 }
             }
         },
+        "/users/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a new user",
+                "description": "Add a new user to the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user data",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "fullName": {
+                                    "type": "string"
+                                },
+                                "age": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user added successfully and token send to header x-auth-token"
+                    },
+                    "400": {
+                        "description": "Invalid Data supplied"
+                    },
+                    "500": {
+                        "description": "Faild to insert new user"
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "User Login",
+                "description": "user login to the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user data",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully login and return token"
+                    },
+                    "400": {
+                        "description": "Invalid Data supplied"
+                    },
+                    "500": {
+                        "description": "Faild to login"
+                    }
+                }
+            }
+        },
         "/books": {
             "get": {
                 "tags": [
                     "Books"
                 ],
-                "summary": "Return all the books",
-                "description": "Lists all the books from the system",
+                "summary": "Get all books",
+                "description": "Lists all books from the system",
                 "security": [
                     {
                         "Bearer": []
@@ -375,95 +414,114 @@
                         "description": "Faild to get Books list"
                     }
                 }
-            }
-        },
-        "/books/details/id/{bookId}": {
-            "get": {
+            },
+            "put": {
                 "tags": [
                     "Books"
                 ],
-                "summary": "Find book by Id",
-                "description": "Returns a book details",
+                "summary": "Update book",
+                "description": "Update an existing book details",
                 "security": [
                     {
                         "Bearer": []
                     }
                 ],
-                "produces": [
+                "consumes": [
                     "application/json"
                 ],
                 "parameters": [
                     {
+                        "in": "formData",
                         "name": "bookId",
-                        "in": "path",
-                        "description": "Id of book to return",
-                        "required": "true",
+                        "description": "Book id",
+                        "required": true,
                         "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfull operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Book"
-                            }
-                        }
                     },
-                    "404": {
-                        "description": "Book ID not found"
-                    },
-                    "500": {
-                        "description": "Faild to get book"
-                    }
-                }
-            }
-        },
-        "/books/details/category/{booksCategory}": {
-            "get": {
-                "tags": [
-                    "Books"
-                ],
-                "summary": "Find books by category",
-                "description": "Returns a books details with the same category",
-                "security": [
                     {
-                        "Bearer": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "booksCategory",
-                        "in": "path",
-                        "description": "category of books to return",
-                        "required": "true",
+                        "in": "formData",
+                        "name": "bookTitle",
+                        "description": "Book title",
+                        "required": true,
                         "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookDescription",
+                        "description": "Book description",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookAuthor",
+                        "description": "Book author",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookPublisher",
+                        "description": "Book publisher",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookCategory",
+                        "description": "Book category",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookPages",
+                        "description": "Book pages",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookPrice",
+                        "description": "Book price",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "storeCode",
+                        "description": "store code",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "createdBy",
+                        "description": "created by",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bookImg",
+                        "description": "Book image",
+                        "type": "file"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfull operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Book"
-                            }
-                        }
+                        "description": "Book updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid Data supplied"
                     },
                     "404": {
-                        "description": "Books category not found"
+                        "description": "Book ID or store code not found"
                     },
                     "500": {
-                        "description": "Faild to get books"
+                        "description": "Faild to update book"
                     }
                 }
-            }
-        },
-        "/books/save": {
+            },
             "post": {
                 "tags": [
                     "Books"
@@ -567,116 +625,48 @@
                 }
             }
         },
-        "/books/update": {
-            "put": {
+        "/books/id/{bookId}": {
+            "get": {
                 "tags": [
                     "Books"
                 ],
-                "summary": "Update a book",
-                "description": "Update an existing book details",
+                "summary": "Get book by Id",
+                "description": "Returns a book details",
                 "security": [
                     {
                         "Bearer": []
                     }
                 ],
-                "consumes": [
+                "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "in": "formData",
                         "name": "bookId",
-                        "description": "Book id",
-                        "required": true,
+                        "in": "path",
+                        "description": "Id of book to return",
+                        "required": "true",
                         "type": "integer"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookTitle",
-                        "description": "Book title",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookDescription",
-                        "description": "Book description",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookAuthor",
-                        "description": "Book author",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookPublisher",
-                        "description": "Book publisher",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookCategory",
-                        "description": "Book category",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookPages",
-                        "description": "Book pages",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookPrice",
-                        "description": "Book price",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "storeCode",
-                        "description": "store code",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "createdBy",
-                        "description": "created by",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "bookImg",
-                        "description": "Book image",
-                        "type": "file"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Book updated successfully"
-                    },
-                    "400": {
-                        "description": "Invalid Data supplied"
+                        "description": "Successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Book ID or store code not found"
+                        "description": "Book ID not found"
                     },
                     "500": {
-                        "description": "Faild to update book"
+                        "description": "Faild to get book"
                     }
                 }
-            }
-        },
-        "/books/delete/id/{bookId}": {
+            },
             "delete": {
                 "tags": [
                     "Books"
@@ -712,7 +702,50 @@
                 }
             }
         },
-        "/books/delete/storecode/{storeCode}": {
+        "/books/category/{booksCategory}": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get books by category",
+                "description": "Returns a books details with the same category",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "booksCategory",
+                        "in": "path",
+                        "description": "category of books to return",
+                        "required": "true",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Books category not found"
+                    },
+                    "500": {
+                        "description": "Faild to get books"
+                    }
+                }
+            }
+        },
+        "/books/storecode/{storeCode}": {
             "delete": {
                 "tags": [
                     "Books"
@@ -753,7 +786,7 @@
                 "tags": [
                     "Stores"
                 ],
-                "summary": "Return all the stores",
+                "summary": "Get all stores",
                 "description": "Lists all the stores from the system",
                 "security": [
                     {
@@ -777,95 +810,7 @@
                         "description": "Faild to get Stores list"
                     }
                 }
-            }
-        },
-        "/stores/details/{storeId}": {
-            "get": {
-                "tags": [
-                    "Stores"
-                ],
-                "summary": "Find store by Id",
-                "description": "Returns a store details",
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "storeId",
-                        "in": "path",
-                        "description": "Id of store to return",
-                        "required": "true",
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfull operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Store"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Store ID not found"
-                    },
-                    "500": {
-                        "description": "Faild to get store"
-                    }
-                }
-            }
-        },
-        "/stores/books/{storeId}": {
-            "get": {
-                "tags": [
-                    "Stores"
-                ],
-                "summary": "Find store books",
-                "description": "Returns a store books by ID",
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "storeId",
-                        "in": "path",
-                        "description": "Id of store",
-                        "required": "true",
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successfull operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Book"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Store ID not found"
-                    },
-                    "500": {
-                        "description": "Faild to get store books"
-                    }
-                }
-            }
-        },
-        "/stores/save": {
+            },
             "post": {
                 "tags": [
                     "Stores"
@@ -913,9 +858,7 @@
                         "description": "Faild to insert new store"
                     }
                 }
-            }
-        },
-        "/stores/update": {
+            },
             "put": {
                 "tags": [
                     "Stores"
@@ -971,7 +914,93 @@
                 }
             }
         },
-        "/stores/delete/id/{storeId}": {
+        "/stores/id/{storeId}": {
+            "get": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Get store by Id",
+                "description": "Returns a store details",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "storeId",
+                        "in": "path",
+                        "description": "Id of store to return",
+                        "required": "true",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Store"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Store ID not found"
+                    },
+                    "500": {
+                        "description": "Faild to get store"
+                    }
+                }
+            }
+        },
+        "/stores/books/{storeId}": {
+            "get": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Get store books",
+                "description": "Returns a store books by ID",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "storeId",
+                        "in": "path",
+                        "description": "Id of store",
+                        "required": "true",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfull operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Book"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Store ID not found"
+                    },
+                    "500": {
+                        "description": "Faild to get store books"
+                    }
+                }
+            }
+        },
+        "/stores/{storeId}": {
             "delete": {
                 "tags": [
                     "Stores"

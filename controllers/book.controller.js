@@ -1,14 +1,14 @@
-const queries = require("../db/queries");
-const dbConnection = require("../db/connection");
 const logger = require("../config/logger");
 const imgUpload = require("../util/imgUpload");
+const { dbQuery } = require("../db/connection");
+const queries = require("../db/queries").queryList;
 const { bookValidation, checkCode, checkId } = require("../models/book.model");
 
 exports.getBooksList = async (req, res) => {
   try {
-    let booksListQuery = queries.queryList.getBooksListQuery;
-    let result = await dbConnection.dbQuery(booksListQuery);
-    return res.status(200).send(JSON.stringify(result.rows));
+    let { getBooksListQuery } = queries;
+    let result = await dbQuery(getBooksListQuery);
+    return res.status(200).json(result.rows);
   } catch (err) {
     logger.error(`From book.controller on getBookDetails : ${err}`);
     return res.status(500).send({ error: "Faild to get Books list" });
@@ -17,13 +17,15 @@ exports.getBooksList = async (req, res) => {
 
 exports.getBookDetails = async (req, res) => {
   try {
-    let bookId = req.params.bookId;
-    let getBookDetailsQuery = queries.queryList.getBookDetailsQuery;
-    let result = await dbConnection.dbQuery(getBookDetailsQuery, [bookId]);
+    let { bookId } = req.params;
+    let { getBookDetailsQuery } = queries;
+    let result = await dbQuery(getBookDetailsQuery, [bookId]);
+
+    // Check if book exist
     if (result.rowCount == 0) {
       return res.status(404).send({ error: `Book id: ${bookId} not found` });
     }
-    return res.status(200).send(JSON.stringify(result.rows));
+    return res.status(200).json(result.rows);
   } catch (err) {
     logger.error(`From book.controller on getBookDetails : ${err}`);
     return res.status(500).send({ error: "Faild to get book details" });
@@ -32,17 +34,17 @@ exports.getBookDetails = async (req, res) => {
 
 exports.getBooksByCategory = async (req, res) => {
   try {
-    let booksCategory = req.params.booksCategory;
-    let getBooksByCategoryQuery = queries.queryList.getBooksByCategoryQuery;
-    let result = await dbConnection.dbQuery(getBooksByCategoryQuery, [
-      booksCategory,
-    ]);
+    let { booksCategory } = req.params;
+    let { getBooksByCategoryQuery } = queries;
+    let result = await dbQuery(getBooksByCategoryQuery, [booksCategory]);
+
+    // Check if category exist
     if (result.rowCount == 0) {
       return res
         .status(404)
         .send({ error: `Books category: ${booksCategory} not found` });
     }
-    return res.status(200).send(JSON.stringify(result.rows));
+    return res.status(200).json(result.rows);
   } catch (err) {
     logger.error(`From book.controller on getBooksByCategory : ${err}`);
     return res.status(500).send({ error: "Faild to get books by category" });
@@ -62,11 +64,13 @@ exports.insertBook = async (req, res) => {
       storeCode,
     } = req.body;
 
+    // Check if any validation error
     let validationError = await bookValidation(req.body);
     if (validationError) {
       return res.status(400).send(validationError.details[0].message);
     }
 
+    // Check if store code exist
     let checkCodeResult = await checkCode(storeCode);
     if (!checkCodeResult) {
       return res.status(404).send({ error: "Store code not found" });
@@ -77,17 +81,14 @@ exports.insertBook = async (req, res) => {
       return res.status(400).send("Book image is required");
     }
 
+    // Check image format
     let image = req.files.bookImg;
     let checkImgFromat = await imgUpload.checkImgFromat(image);
     if (!checkImgFromat) {
-      return res
-        .status(400)
-        .send(
-          "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and its name must be less than 30 characters"
-        );
+      return res.status(400).send("Invalid image format.");
     }
 
-    //upload img
+    // Upload image
     let imgName = await imgUpload.uploadBookImg(image);
     if (!imgName) return res.status(500).send("Faild to upload image");
 
@@ -107,8 +108,10 @@ exports.insertBook = async (req, res) => {
       createdOn,
       createdBy,
     ];
-    let insertBookQuery = queries.queryList.insertBookQuery;
-    await dbConnection.dbQuery(insertBookQuery, values);
+
+    // Insert book to database
+    let { insertBookQuery } = queries;
+    await dbQuery(insertBookQuery, values);
     return res.status(200).send("Book created successfully");
   } catch (err) {
     logger.error(`From book.controller on insertBook : ${err}`);
@@ -131,23 +134,27 @@ exports.updateBook = async (req, res) => {
       bookId,
     } = req.body;
 
+    // Check if any validation error
     let validationError = await bookValidation(req.body);
     if (validationError) {
       return res.status(400).send(validationError.details[0].message);
     }
 
+    // Check if createdBy and bookId exist in req
     if (!createdBy || !bookId) {
       return res
         .status(400)
         .send({ error: "bookId and createdBy is required" });
     }
 
-    let getBookDetailsQuery = queries.queryList.getBookDetailsQuery;
-    let result1 = await dbConnection.dbQuery(getBookDetailsQuery, [bookId]);
+    // Check if book id exist
+    let { getBookDetailsQuery } = queries;
+    let result1 = await dbQuery(getBookDetailsQuery, [bookId]);
     if (result1.rowCount == 0) {
       return res.status(404).send({ error: `Book id: ${bookId} not found` });
     }
 
+    // Check if store code exist
     let checkCodeResult = await checkCode(storeCode);
     if (!checkCodeResult) {
       return res.status(404).send({ error: "Store code not found" });
@@ -155,20 +162,16 @@ exports.updateBook = async (req, res) => {
 
     let bookImg = result1.rows[0].book_img;
 
-    //check if image file exist
+    // Check if image file exist
     if (req.files) {
-      //check image extension and name length
+      // Check image extension and name length
       let image = req.files.bookImg;
       let checkImgFromat = await imgUpload.checkImgFromat(image);
       if (!checkImgFromat) {
-        return res
-          .status(400)
-          .send(
-            "Invalid image format. Only 'jpg' and 'jpeg' and 'png' images are allowed and its name must be less than 30 characters"
-          );
+        return res.status(400).send("Invalid image format.");
       }
 
-      //upload img
+      // Upload img
       let imgName = await imgUpload.uploadBookImg(image);
       if (!imgName) return res.status(500).send("Faild to upload image");
 
@@ -190,8 +193,10 @@ exports.updateBook = async (req, res) => {
       createdBy,
       bookId,
     ];
-    let updateBookQuery = queries.queryList.updateBookQuery;
-    await dbConnection.dbQuery(updateBookQuery, values);
+
+    // Update book
+    let { updateBookQuery } = queries;
+    await dbQuery(updateBookQuery, values);
     return res.status(200).send(`Book ${bookTitle} updated successfully`);
   } catch (err) {
     logger.error(`From book.controller on updateBook : ${err}`);
@@ -201,15 +206,17 @@ exports.updateBook = async (req, res) => {
 
 exports.deleteBookById = async (req, res) => {
   try {
-    let bookId = req.params.bookId;
+    let { bookId } = req.params;
 
+    // Check if book id exist
     let checkIdResult = await checkId(bookId);
     if (!checkIdResult) {
       return res.status(404).send({ error: `Book id: ${bookId} not found` });
     }
 
-    let deleteBookQuery = queries.queryList.deleteBookByIdQuery;
-    await dbConnection.dbQuery(deleteBookQuery, [bookId]);
+    // Delete book
+    let deleteBookQuery = queries.deleteBookByIdQuery;
+    await dbQuery(deleteBookQuery, [bookId]);
     return res.status(200).send(`Book with Id: ${bookId} deleted successfully`);
   } catch (err) {
     logger.error(`From book.controller on deleteBook : ${err}`);
@@ -221,13 +228,15 @@ exports.deleteBooksBystoreCode = async (req, res) => {
   try {
     let storeCode = req.params.storeCode.toUpperCase();
 
+    // Check if store code exist
     let checkCodeResult = await checkCode(storeCode);
     if (!checkCodeResult) {
       return res.status(404).send({ error: "Store code not found" });
     }
 
-    let deleteBookByStoreCode = queries.queryList.deleteBooksByStoreCodeQuery;
-    await dbConnection.dbQuery(deleteBookByStoreCode, [storeCode]);
+    // Delete book
+    let deleteBookByStoreCode = queries.deleteBooksByStoreCodeQuery;
+    await dbQuery(deleteBookByStoreCode, [storeCode]);
     return res
       .status(200)
       .send(`Books with store code: ${storeCode} deleted successfully`);

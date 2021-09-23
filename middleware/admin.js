@@ -3,4 +3,5 @@ const admin = (req, res, next) => {
     return res.status(403).send("Access denied. You are not admin");
   next();
 };
+
 module.exports = admin;

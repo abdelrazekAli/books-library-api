@@ -1,6 +1,7 @@
 const randomString = require("randomstring");
 const jwt = require("jsonwebtoken");
 
+// Get random store code
 exports.getStoreCode = () => {
   return randomString.generate({
     length: 5,

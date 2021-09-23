@@ -1,0 +1,15 @@
+{"level":"error","message":"From imgUpload : Error: ENOENT: no such file or directory, open './uploads/user.imgs/1632389056234IMG_4996_resized.JPG'","timestamp":"9/23/2021, 11:24:16 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value too long for type character varying(50)","timestamp":"9/23/2021, 11:24:16 AM"}
+{"level":"error","message":"From user.controller on updateUser : error: value too long for type character varying(50)","timestamp":"9/23/2021, 11:24:16 AM"}
+{"level":"error","message":"From imgUpload : Error: ENOENT: no such file or directory, open './uploads/user.imgs/1632389266686IMG_4996_resized.JPG'","timestamp":"9/23/2021, 11:27:46 AM"}
+{"level":"error","message":"From imgUpload : Error: ENOENT: no such file or directory, open './uploads/user.imgs/1632389417309IMG_4996_resized.JPG'","timestamp":"9/23/2021, 11:30:17 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value too long for type character varying(50)","timestamp":"9/23/2021, 11:40:16 AM"}
+{"level":"error","message":"From book.controller on updateBook : error: value too long for type character varying(50)","timestamp":"9/23/2021, 11:40:16 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value \"45455555555555555555\" is out of range for type integer","timestamp":"9/23/2021, 11:42:52 AM"}
+{"level":"error","message":"From book.controller on getBookDetails : error: value \"45455555555555555555\" is out of range for type integer","timestamp":"9/23/2021, 11:42:52 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value \"44554444444444444444444\" is out of range for type integer","timestamp":"9/23/2021, 11:43:14 AM"}
+{"level":"error","message":"From book.controller on getBookDetails : error: value \"44554444444444444444444\" is out of range for type integer","timestamp":"9/23/2021, 11:43:14 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value \"4455444444444\" is out of range for type integer","timestamp":"9/23/2021, 11:43:27 AM"}
+{"level":"error","message":"From book.controller on getBookDetails : error: value \"4455444444444\" is out of range for type integer","timestamp":"9/23/2021, 11:43:27 AM"}
+{"level":"error","message":"From db/connection on dbQuery: error: value \"45445445454545454\" is out of range for type integer","timestamp":"9/23/2021, 11:44:38 AM"}
+{"level":"error","message":"From book.controller on deleteBook : error: value \"45445445454545454\" is out of range for type integer","timestamp":"9/23/2021, 11:44:38 AM"}

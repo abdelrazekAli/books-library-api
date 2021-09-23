@@ -1,11 +1,11 @@
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
 const logger = require("../config/logger");
 
 exports.checkImgFromat = async (image) => {
   let imgExtension = path.extname(image.name);
-  const allowedExtension = [".png", ".jpg", ".JPG", ".jpeg"];
-  if (!allowedExtension.includes(imgExtension) || image.name.length > 30)
+  const allowedExtension = [".png", ".jpg", ".JPG", ".jpeg", ".svg", ".webp"];
+  if (!allowedExtension.includes(imgExtension) || image.name.length > 100)
     return false;
   return true;
 };

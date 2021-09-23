@@ -1,15 +1,17 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const helmet = require("helmet");
 const dotenv = require("dotenv").config();
-const storeRouter = require("./routes/store.route");
-const bookRouter = require("./routes/book.route");
-const userRouter = require("./routes/user.route");
 const swaggerUI = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const fileUpload = require("express-fileupload");
-const cors = require("cors");
-const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+
+// Import routes
+const userRouter = require("./routes/user.route");
+const bookRouter = require("./routes/book.route");
+const storeRouter = require("./routes/store.route");
 
 app.use(cors());
 
@@ -37,10 +39,12 @@ app.use(
   })
 );
 
+// Router for Api docs
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use("/api/v1", userRouter);
-app.use("/api/v1", storeRouter);
-app.use("/api/v1", bookRouter);
+// Routes Middlewares
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/stores", storeRouter);
+app.use("/api/v1/books", bookRouter);
 
 app.listen(process.env.PORT);

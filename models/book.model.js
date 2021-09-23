@@ -1,6 +1,6 @@
-const queries = require("../db/queries");
-const dbConnection = require("../db/connection");
 const Joi = require("joi");
+const queries = require("../db/queries").queryList;
+const { dbQuery } = require("../db/connection");
 
 exports.Book = class Book {
   constructor(
@@ -23,11 +23,12 @@ exports.Book = class Book {
       (this.category = category),
       (this.price = price),
       (this.image = image),
-      (this.pages = pages);
-    this.createdBy = createdBy;
+      (this.pages = pages),
+      (this.createdBy = createdBy);
   }
 };
 
+// Book validation with joi
 exports.bookValidation = async (data) => {
   const schema = Joi.object({
     bookId: Joi.number().integer(),
@@ -44,16 +45,18 @@ exports.bookValidation = async (data) => {
   return schema.validate(data).error;
 };
 
+// Check for book id
 exports.checkId = async (id) => {
-  let checkBookIdQuery = queries.queryList.checkBookIdQuery;
-  let result = await dbConnection.dbQuery(checkBookIdQuery, [id]);
+  let { checkBookIdQuery } = queries;
+  let result = await dbQuery(checkBookIdQuery, [id]);
   if (result.rows[0].count == 0) return false;
   return true;
 };
 
+// Check for store code
 exports.checkCode = async (code) => {
-  let checkStoreCodeQuery = queries.queryList.checkStoreCodeQuery;
-  let result = await dbConnection.dbQuery(checkStoreCodeQuery, [code]);
+  let { checkStoreCodeQuery } = queries;
+  let result = await dbQuery(checkStoreCodeQuery, [code]);
   if (result.rows[0].count == 0) return false;
   return true;
 };
