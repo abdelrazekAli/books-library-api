@@ -10,10 +10,10 @@
         },
         "license": {
             "name": "Github repository",
-            "url": "https://github.com/abdelrazekAli/books-store-api"
+            "url": "https://github.com/abdelrazekAli/books-library-api"
         }
     },
-    "host": "books.abdelrazek.live",
+    "host": "library.abdelrazek.live",
     "basePath": "/api/v1",
     "tags": [
         {
