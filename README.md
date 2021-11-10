@@ -2,4 +2,5 @@
 
 ### Api Docs For Preview
 
-https://library.abdelrazek.live/api-docs
+library.abdelrazek.live/api-docs
+books-store-api.herokuapp.com/api-docs
